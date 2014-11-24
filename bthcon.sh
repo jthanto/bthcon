@@ -21,14 +21,14 @@ fi
 echo 'searching for new device'
 
 NEWDEV=`hcitool scan | grep -o -E -m 1 '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'`
-MYBT = `hciconfig | grep -o -E -m 1 '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'`
+MYBT=`hciconfig | grep -o -E -m 1 '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'`
 
 if [ -z $NEWDEV ]; then
 	echo ERR: Found no paired device
 	exit
 else
-	echo SUC: Found $MYBT
-	echo SUC: Found $NEWDEV
+	echo SUC: Found $MYBT as your bt-addr.
+	echo SUC: Found $NEWDEV as new device.
 	
 	echo SUC: Pairing device $NEWDEV with $MYBT
 	RESULT=`bluez-simple-agent hci0 $NEWDEV`
@@ -37,8 +37,7 @@ else
 	RESULT=`bt-audio -c $NEWDEV`
 	
 	echo Changing to A2DP sound
-	RESULT`pactl set-card-profile bluez_card.$NEWDEV a2dp`
-	
+	RESULT=`pactl set-card-profile bluez_card.$NEWDEV a2dp`
 fi
 
 
